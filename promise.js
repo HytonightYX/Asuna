@@ -49,12 +49,13 @@ class Asuna {
     // 并不是说我上个 promise reject 了，
     // 新的 promise 也是 reject。
     return new Asuna((resolve, reject) => {
+      // 实现 then 的传递穿透
       if (typeof onFulfilled !== 'function') {
-        onFulfilled = () => { }
+        onFulfilled = () => this.value
       }
 
       if (typeof onRejected !== 'function') {
-        onRejected = () => { }
+        onRejected = () => this.value
       }
 
       // 将一组 resolve, reject 函数先放到 callbacks 数组里边去

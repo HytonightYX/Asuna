@@ -10,22 +10,13 @@
       new Asuna((resolve, reject) => {
         resolve("解决");
       })
+        .then()
         .then(
           value => {
             console.log("P2 recive: ", value);
-            return "P2 value";
           },
           reason => {
             console.log("P2 reject: ", reason);
-            return "P2 reason";
-          }
-        )
-        .then(
-          value => {
-            console.log("P3 resolve: ", value);
-          },
-          reason => {
-            console.log("P3 reject: ", reason);
           }
         );
     </script>
