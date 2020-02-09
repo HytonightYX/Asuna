@@ -5,23 +5,17 @@
     <title>Promise Implement</title>
     <script src="promise.js"></script>
   </head>
+  <body>
     <script>
-      new Asuna((resolve, reject) => {
-        resolve("拒绝");
-      })
-        .then(value => {
-          return new Asuna((resolve, reject) => {
-            reject("husiyuan");
-          });
-        })
-        .then(
-          value => {
-            console.log("P3 resolve:", value);
-          },
-          reason => {
-            console.log("P3 reject:", reason);
-          }
-        );
+      let asuna = new Asuna((resolve, reject) => {
+        resolve("解决");
+      });
+
+      let p = asuna.then(value => {
+        // Uncaught TypeError: Chaining cycle detected for promise
+        return p;
+      });
+      console.log(p);
     </script>
   </body>
 </html>

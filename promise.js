@@ -48,7 +48,7 @@ class Asuna {
     // 注意，新的 promise 是新的状态，
     // 并不是说我上个 promise reject 了，
     // 新的 promise 也是 reject。
-    return new Asuna((resolve, reject) => {
+    let asuna = new Asuna((resolve, reject) => {
       // 实现 then 的传递穿透
       if (typeof onFulfilled !== 'function') {
         onFulfilled = () => this.value
@@ -62,10 +62,10 @@ class Asuna {
       if (this.state === PENDING) {
         this.callbacks.push({
           onFulfilled: value => {
-            this.parse(onFulfilled(value), resolve, reject)
+            this.parse(asuna, onFulfilled(value), resolve, reject)
           },
           onRejected: reason => {
-            this.parse(onRejected(reason), resolve, reject)
+            this.parse(asuna, onRejected(reason), resolve, reject)
           }
         })
       }
@@ -73,22 +73,27 @@ class Asuna {
       if (this.state === FULFILLED) {
         // 放入任务队列，做异步
         setTimeout(() => {
-          this.parse(onFulfilled(this.value), resolve, reject)
+          this.parse(asuna, onFulfilled(this.value), resolve, reject)
         }, 0);
       }
 
       if (this.state === REJECTED) {
         setTimeout(() => {
-          this.parse(onRejected(this.value), resolve, reject)
+          this.parse(asuna, onRejected(this.value), resolve, reject)
         }, 0);
       }
     })
+
+    return asuna
   }
 
   /**
    * 判断返回是否为 Asuna
    */
-  parse(result, resolve, reject) {
+  parse(asuna, result, resolve, reject) {
+    if (asuna == result) {
+      throw new TypeError('Chaining cycle detected for promise')
+    }
     try {
       if (result instanceof Asuna) {
         result.then(resolve, reject)
