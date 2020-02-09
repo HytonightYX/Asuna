@@ -7,15 +7,23 @@
   </head>
   <body>
     <script>
-      let asuna = new Asuna((resolve, reject) => {
-        resolve("解决");
+      let p = new Asuna((resolve, reject) => {
+        // resolve("A成功");
+        reject("A失败");
       });
 
-      let p = asuna.then(value => {
-        // Uncaught TypeError: Chaining cycle detected for promise
-        return p;
+      // Asuna.resolve(p).then(
+      //   value => {
+      //     console.log("value", value);
+      //   },
+      //   reason => {
+      //     console.log("reason", reason);
+      //   }
+      // );
+
+      Asuna.reject(p).then(null, reason => {
+        console.log("reason", reason);
       });
-      console.log(p);
     </script>
   </body>
 </html>

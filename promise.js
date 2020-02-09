@@ -20,6 +20,26 @@ class Asuna {
     }
   }
 
+  static resolve(value) {
+    return new Asuna((resolve, reject) => {
+      if (value instanceof Asuna) {
+        value.then(resolve, reject)
+      } else {
+        resolve(value)
+      }
+    })
+  }
+
+  static reject(value) {
+    return new Asuna((resolve, reject) => {
+      if (value instanceof Asuna) {
+        value.then(resolve, reject)
+      } else {
+        reject(value)
+      }
+    })
+  }
+
   resolve(value) {
     if (this.state === PENDING) {
       this.state = FULFILLED
@@ -91,7 +111,7 @@ class Asuna {
    * 判断返回是否为 Asuna
    */
   parse(asuna, result, resolve, reject) {
-    if (asuna == result) {
+    if (asuna === result) {
       throw new TypeError('Chaining cycle detected for promise')
     }
     try {

@@ -8,22 +8,19 @@
   </head>
   <body>
     <script>
-      new Promise((resolve, reject) => {
-        resolve("拒绝");
-      })
-        .then(value => {
-          return new Promise((resolve, reject) => {
-            reject("husiyuan");
-          });
-        })
-        .then(
-          value => {
-            console.log("P3 resolve:", value);
-          },
-          reason => {
-            console.log("P3 reject:", reason);
-          }
-        );
+      let p = new Promise((resolve, reject) => {
+        // resolve("成功");
+        reject("P失败");
+      });
+
+      Promise.resolve(p).then(
+        value => {
+          console.log(value);
+        },
+        reason => {
+          console.log(reason);
+        }
+      );
     </script>
   </body>
 </html>
