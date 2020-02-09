@@ -62,28 +62,10 @@ class Asuna {
       if (this.state === PENDING) {
         this.callbacks.push({
           onFulfilled: value => {
-            try {
-              let result = onFulfilled(value)
-              if (result instanceof Asuna) {
-                result.then(resolve, reject)
-              } else {
-                resolve(result)
-              }
-            } catch (error) {
-              reject(error)
-            }
+            this.parse(onFulfilled(value), resolve, reject)
           },
           onRejected: reason => {
-            try {
-              let result = onRejected(reason)
-              if (result instanceof Asuna) {
-                result.then(resolve, reject)
-              } else {
-                resolve(result)
-              }
-            } catch (error) {
-              reject(error)
-            }
+            this.parse(onRejected(reason), resolve, reject)
           }
         })
       }
@@ -91,34 +73,30 @@ class Asuna {
       if (this.state === FULFILLED) {
         // 放入任务队列，做异步
         setTimeout(() => {
-          try {
-            let result = onFulfilled(this.value)
-            if (result instanceof Asuna) {
-              result.then(resolve, reject)
-            } else {
-              resolve(result)
-            }
-          } catch (error) {
-            reject(error)
-          }
+          this.parse(onFulfilled(this.value), resolve, reject)
         }, 0);
       }
 
       if (this.state === REJECTED) {
         setTimeout(() => {
-          try {
-            let result = onRejected(this.value)
-            // 注意这里要写成功的，因为第二个promise就是成功的
-            if (result instanceof Asuna) {
-              result.then(resolve, reject)
-            } else {
-              resolve(result)
-            }
-          } catch (error) {
-            reject(error)
-          }
+          this.parse(onRejected(this.value), resolve, reject)
         }, 0);
       }
     })
+  }
+
+  /**
+   * 判断返回是否为 Asuna
+   */
+  parse(result, resolve, reject) {
+    try {
+      if (result instanceof Asuna) {
+        result.then(resolve, reject)
+      } else {
+        resolve(result)
+      }
+    } catch (error) {
+      reject(error)
+    }
   }
 }
