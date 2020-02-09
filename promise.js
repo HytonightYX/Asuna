@@ -126,7 +126,9 @@ class Asuna {
   }
 
   /**
-   * Asuna.all Implement
+   * Asuna.all() Implement
+   * 执行所有，全部成功 则 resolve
+   * 任何一个失败就 reject
    */
   static all(promises) {
     return new Asuna((resolve, reject) => {
@@ -137,6 +139,22 @@ class Asuna {
           if (values.length === promises.length) {
             resolve(values)
           }
+        }, reason => {
+          reject(reason)
+        })
+      })
+    })
+  }
+
+  /**
+   * Asuna.race() Implement
+   * Promise 数组中哪个最快返回哪个
+   */
+  static race(promises) {
+    return new Asuna((resolve, reject) => {
+      promises.map(promise => {
+        promise.then(value => {
+          resolve(value)
         }, reason => {
           reject(reason)
         })
