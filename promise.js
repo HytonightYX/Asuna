@@ -20,26 +20,6 @@ class Asuna {
     }
   }
 
-  static resolve(value) {
-    return new Asuna((resolve, reject) => {
-      if (value instanceof Asuna) {
-        value.then(resolve, reject)
-      } else {
-        resolve(value)
-      }
-    })
-  }
-
-  static reject(value) {
-    return new Asuna((resolve, reject) => {
-      if (value instanceof Asuna) {
-        value.then(resolve, reject)
-      } else {
-        reject(value)
-      }
-    })
-  }
-
   resolve(value) {
     if (this.state === PENDING) {
       this.state = FULFILLED
@@ -123,5 +103,44 @@ class Asuna {
     } catch (error) {
       reject(error)
     }
+  }
+
+  static resolve(value) {
+    return new Asuna((resolve, reject) => {
+      if (value instanceof Asuna) {
+        value.then(resolve, reject)
+      } else {
+        resolve(value)
+      }
+    })
+  }
+
+  static reject(value) {
+    return new Asuna((resolve, reject) => {
+      if (value instanceof Asuna) {
+        value.then(resolve, reject)
+      } else {
+        reject(value)
+      }
+    })
+  }
+
+  /**
+   * Asuna.all Implement
+   */
+  static all(promises) {
+    return new Asuna((resolve, reject) => {
+      const values = []
+      promises.forEach((promise) => {
+        promise.then(value => {
+          values.push(value)
+          if (values.length === promises.length) {
+            resolve(values)
+          }
+        }, reason => {
+          reject(reason)
+        })
+      })
+    })
   }
 }

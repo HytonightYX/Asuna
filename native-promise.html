@@ -8,12 +8,16 @@
   </head>
   <body>
     <script>
-      let p = new Promise((resolve, reject) => {
-        // resolve("成功");
-        reject("P失败");
+      let p1 = new Promise(resolve => {
+        resolve("p1 解决");
       });
 
-      Promise.resolve(p).then(
+      let p2 = new Promise((resolve, reject) => {
+        // resolve("p2 解决");
+        reject("p2 失败");
+      });
+
+      Promise.all([p1, p2]).then(
         value => {
           console.log(value);
         },

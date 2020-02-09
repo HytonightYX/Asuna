@@ -2,27 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Promise Implement</title>
+    <title>Asuna Implement</title>
     <script src="promise.js"></script>
   </head>
   <body>
     <script>
-      let p = new Asuna((resolve, reject) => {
-        // resolve("A成功");
-        reject("A失败");
+      let p1 = new Asuna(resolve => {
+        resolve("a1 解决");
       });
 
-      // Asuna.resolve(p).then(
-      //   value => {
-      //     console.log("value", value);
-      //   },
-      //   reason => {
-      //     console.log("reason", reason);
-      //   }
-      // );
+      let p2 = new Asuna(resolve => {
+        resolve("a2 解决");
+      });
 
-      Asuna.reject(p).then(null, reason => {
-        console.log("reason", reason);
+      Asuna.all([p1, p2]).then(value => {
+        console.log(value);
       });
     </script>
   </body>
