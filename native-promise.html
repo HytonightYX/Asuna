@@ -9,15 +9,18 @@
   <body>
     <script>
       let p1 = new Promise(resolve => {
-        resolve("p1 解决");
+        setTimeout(() => {
+          resolve("p1 解决 2s");
+        }, 2000);
       });
 
       let p2 = new Promise((resolve, reject) => {
-        // resolve("p2 解决");
-        reject("p2 失败");
+        setTimeout(() => {
+          resolve("p2 解决 3s");
+        }, 3000);
       });
 
-      Promise.all([p1, p2]).then(
+      Promise.race([p1, p2]).then(
         value => {
           console.log(value);
         },

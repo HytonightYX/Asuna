@@ -8,16 +8,25 @@
   <body>
     <script>
       let p1 = new Asuna(resolve => {
-        resolve("a1 解决");
+        setTimeout(() => {
+          resolve("a1 解决 1s");
+        }, 1000);
       });
 
-      let p2 = new Asuna(resolve => {
-        resolve("a2 解决");
+      let p2 = new Asuna((resolve, reject) => {
+        setTimeout(() => {
+          resolve("a2 解决 2s");
+        }, 2000);
       });
 
-      Asuna.all([p1, p2]).then(value => {
-        console.log(value);
-      });
+      Asuna.race([p1, p2]).then(
+        value => {
+          console.log("value: ", value);
+        },
+        reason => {
+          console.log("reason: ", reason);
+        }
+      );
     </script>
   </body>
 </html>
