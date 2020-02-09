@@ -5,18 +5,29 @@
     <title>Promise Implement</title>
     <script src="promise.js"></script>
   </head>
-  <body>
     <script>
       new Asuna((resolve, reject) => {
-        resolve("解决");
+        setTimeout(() => {
+          reject("拒绝");
+        }, 1000);
       })
-        .then()
         .then(
           value => {
-            console.log("P2 recive: ", value);
+            console.log("P2 recive value:", value);
+            console.log(value);
           },
           reason => {
-            console.log("P2 reject: ", reason);
+            return new Asuna((resolve, reject) => {
+              reject("P2 reason");
+            });
+          }
+        )
+        .then(
+          value => {
+            console.log("P3 recive value:", value);
+          },
+          reason => {
+            console.log("P3 recive reason:", reason);
           }
         );
     </script>

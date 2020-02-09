@@ -64,7 +64,11 @@ class Asuna {
           onFulfilled: value => {
             try {
               let result = onFulfilled(value)
-              resolve(result)
+              if (result instanceof Asuna) {
+                result.then(resolve, reject)
+              } else {
+                resolve(result)
+              }
             } catch (error) {
               reject(error)
             }
@@ -72,7 +76,11 @@ class Asuna {
           onRejected: reason => {
             try {
               let result = onRejected(reason)
-              resolve(result)
+              if (result instanceof Asuna) {
+                result.then(resolve, reject)
+              } else {
+                resolve(result)
+              }
             } catch (error) {
               reject(error)
             }
@@ -85,7 +93,11 @@ class Asuna {
         setTimeout(() => {
           try {
             let result = onFulfilled(this.value)
-            resolve(result)
+            if (result instanceof Asuna) {
+              result.then(resolve, reject)
+            } else {
+              resolve(result)
+            }
           } catch (error) {
             reject(error)
           }
@@ -97,7 +109,11 @@ class Asuna {
           try {
             let result = onRejected(this.value)
             // 注意这里要写成功的，因为第二个promise就是成功的
-            resolve(result)
+            if (result instanceof Asuna) {
+              result.then(resolve, reject)
+            } else {
+              resolve(result)
+            }
           } catch (error) {
             reject(error)
           }
@@ -106,5 +122,3 @@ class Asuna {
     })
   }
 }
-
-
